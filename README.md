@@ -1,6 +1,6 @@
 # Airtable WooCommerce Sync
 
-**Version:** 0.1.0
+**Version:** 0.1.1
 **Contributors:** AI Developer
 **License:** GPLv2 or later
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html
@@ -9,13 +9,13 @@ A WordPress plugin to synchronize variable products from an Airtable base to Woo
 
 ## Description
 
-This plugin allows WooCommerce store owners to manage their variable product inventory in Airtable and sync it automatically (future feature) or manually to their WordPress/WooCommerce store. It handles:
+This plugin allows WooCommerce store owners to manage their variable product inventory in Airtable and sync it manually to their WordPress/WooCommerce store. It handles:
 
 *   Variable products.
 *   Product attributes (e.g., Color, Size).
 *   Individual product variations with their own SKU, price, and stock quantity.
 
-This plugin is intended for users who are comfortable with structuring data in Airtable, particularly using JSON for defining product attributes and variations within text fields.
+This plugin now uses **Airtable Personal Access Tokens** for more secure API access, aligning with Airtable's latest authentication recommendations. It is intended for users who are comfortable with structuring data in Airtable, particularly using JSON for defining product attributes and variations within text fields.
 
 ## Installation
 
@@ -28,8 +28,8 @@ This plugin is intended for users who are comfortable with structuring data in A
 ## Configuration
 
 1.  After activation, navigate to **Airtable Sync** from the main WordPress admin menu.
-2.  Enter your **Airtable API Key**. You can find this on your Airtable account page.
-3.  Enter your **Airtable Base ID**. This can be found in the API documentation for your base on Airtable.
+2.  Enter your **Airtable Personal Access Token**. Airtable is transitioning to Personal Access Tokens for enhanced security. You can generate these tokens from your Airtable account page (usually under Developer Hub or Account settings). Make sure to grant the token the necessary permissions (e.g., `data.records:read`, `data.records:write`, `schema.bases:read`).
+3.  Enter your **Airtable Base ID**. This can be found in the API documentation for your base on Airtable (often in the URL when viewing API docs, or on the introduction page).
 4.  Enter the **Airtable Table Name** that contains your product information (e.g., "Products").
 5.  Click **Save Settings**.
 
@@ -72,9 +72,13 @@ Your Airtable table needs to be structured correctly for the sync to work. Here 
 
 ## Changelog
 
+### 0.1.1
+*   Updated authentication to use Airtable Personal Access Tokens (PATs) instead of API Keys, following Airtable's recommended security practices.
+*   Updated admin settings UI and documentation to reflect the use of PATs.
+
 ### 0.1.0 (Initial Release)
 *   Basic plugin structure.
-*   Airtable API integration (read-only).
+*   Airtable API integration (read-only via API Key).
 *   WooCommerce variable product creation and update logic.
 *   Admin settings page for API credentials and table name.
 *   Manual synchronization trigger.

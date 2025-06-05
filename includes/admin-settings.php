@@ -43,7 +43,7 @@ function aws_settings_init() {
         'airtable_woocommerce_sync_settings'
     );
 
-    add_settings_field('aws_api_key', __( 'Airtable API Key', 'airtable-woocommerce-sync' ), 'aws_api_key_field_html', 'airtable_woocommerce_sync_settings', 'aws_api_settings_section');
+    add_settings_field('aws_api_key', __( 'Airtable Personal Access Token', 'airtable-woocommerce-sync' ), 'aws_api_key_field_html', 'airtable_woocommerce_sync_settings', 'aws_api_settings_section');
     add_settings_field('aws_base_id', __( 'Airtable Base ID', 'airtable-woocommerce-sync' ), 'aws_base_id_field_html', 'airtable_woocommerce_sync_settings', 'aws_api_settings_section');
     add_settings_field('aws_table_name', __( 'Airtable Table Name', 'airtable-woocommerce-sync' ), 'aws_table_name_field_html', 'airtable_woocommerce_sync_settings', 'aws_api_settings_section');
 
@@ -61,9 +61,9 @@ function aws_sync_actions_section_callback() {
 
 function aws_api_key_field_html() {
     $options = get_option( 'aws_settings' );
-    $api_key = isset( $options['api_key'] ) ? $options['api_key'] : '';
+    $api_key = isset( $options['api_key'] ) ? $options['api_key'] : ''; // Variable name $api_key can remain, it holds the token.
     echo '<input type="password" id="aws_api_key" name="aws_settings[api_key]" value="' . esc_attr( $api_key ) . '" class="regular-text">';
-    echo '<p class="description">' . esc_html__( 'Your Airtable API key.', 'airtable-woocommerce-sync' ) . '</p>';
+    echo '<p class="description">' . esc_html__( 'Your Airtable Personal Access Token. This is now preferred over API keys.', 'airtable-woocommerce-sync' ) . '</p>';
 }
 
 function aws_base_id_field_html() {
@@ -96,16 +96,16 @@ function aws_handle_manual_sync() {
     }
 
     $options = get_option( 'aws_settings' );
-    $api_key = isset( $options['api_key'] ) ? $options['api_key'] : '';
+    $personal_access_token = isset( $options['api_key'] ) ? $options['api_key'] : ''; // Value from 'api_key' field is the PAT
     $base_id = isset( $options['base_id'] ) ? $options['base_id'] : '';
     $table_name = isset( $options['table_name'] ) ? $options['table_name'] : '';
 
-    if ( empty( $api_key ) || empty( $base_id ) || empty( $table_name ) ) {
+    if ( empty( $personal_access_token ) || empty( $base_id ) || empty( $table_name ) ) {
         wp_redirect( add_query_arg( 'aws_sync_message', 'missing_credentials', admin_url( 'admin.php?page=airtable_woocommerce_sync' ) ) );
         exit;
     }
 
-    $airtable_api = new Airtable_API( $api_key, $base_id );
+    $airtable_api = new Airtable_API( $personal_access_token, $base_id ); // Pass PAT to constructor
     $product_manager = new WooCommerce_Product_Manager();
 
     $records = $airtable_api->get_records( $table_name );
@@ -223,7 +223,7 @@ function aws_settings_page_html() {
         switch ( $message_type ) {
             case 'missing_credentials':
                 $class = 'notice notice-error';
-                $message = __( 'Airtable API Key, Base ID, or Table Name is missing. Please fill in all required fields.', 'airtable-woocommerce-sync' );
+                $message = __( 'Airtable Personal Access Token, Base ID, or Table Name is missing. Please fill in all required fields.', 'airtable-woocommerce-sync' );
                 break;
             case 'airtable_error':
                 $class = 'notice notice-error';

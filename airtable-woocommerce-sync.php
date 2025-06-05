@@ -3,7 +3,7 @@
  * Plugin Name: Airtable WooCommerce Sync
  * Plugin URI:
  * Description: A plugin to sync variable products from Airtable to WooCommerce.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: AI Developer
  * Author URI:
  * License: GPLv2 or later
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-define( 'AIRTABLE_WOOCOMMERCE_SYNC_VERSION', '0.1.0' );
+define( 'AIRTABLE_WOOCOMMERCE_SYNC_VERSION', '0.1.1' );
 define( 'AIRTABLE_WOOCOMMERCE_SYNC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'AIRTABLE_WOOCOMMERCE_SYNC_PLUGIN_URL', plugin_dir_url( __FILE__ ) ); // Added for potential future use (e.g. JS/CSS)
 

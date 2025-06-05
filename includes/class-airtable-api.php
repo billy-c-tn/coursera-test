@@ -5,15 +5,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Airtable_API {
-    private $api_key;
+    private $personal_access_token; // Renamed from $api_key
     private $base_id;
     private $api_url = 'https://api.airtable.com/v0/';
 
-    public function __construct( $api_key, $base_id ) {
-        $this->api_key = $api_key;
+    /**
+     * Constructor.
+     *
+     * @param string $personal_access_token Airtable Personal Access Token. // Updated comment
+     * @param string $base_id Airtable Base ID.
+     */
+    public function __construct( $personal_access_token, $base_id ) { // Renamed parameter
+        $this->personal_access_token = $personal_access_token; // Updated assignment
         $this->base_id = $base_id;
     }
 
+    /**
+     * Make a GET request to the Airtable API.
+     *
+     * @param string $endpoint The API endpoint (e.g., table name).
+     * @param array  $params   Query parameters.
+     * @return array|WP_Error The API response or WP_Error on failure.
+     */
     private function make_request( $endpoint, $params = [] ) {
         $url = $this->api_url . $this->base_id . '/' . rawurlencode($endpoint);
 
@@ -23,7 +36,7 @@ class Airtable_API {
 
         $args = [
             'headers' => [
-                'Authorization' => 'Bearer ' . $this->api_key,
+                'Authorization' => 'Bearer ' . $this->personal_access_token, // Updated usage
                 'Content-Type'  => 'application/json',
             ],
             'timeout' => 30,
@@ -56,6 +69,13 @@ class Airtable_API {
         return $data;
     }
 
+    /**
+     * Fetch records from a table.
+     *
+     * @param string $table_name The name of the table to fetch records from.
+     * @param array  $params     Optional query parameters (e.g., for filtering, sorting, pagination).
+     * @return array|WP_Error The list of records or WP_Error on failure.
+     */
     public function get_records( $table_name, $params = [] ) {
         $response = $this->make_request( $table_name, $params );
 
